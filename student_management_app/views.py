@@ -3,6 +3,8 @@ import datetime
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.contrib import messages
+
 
 from student_management_app.EmailBackEnd import EmailBackEnd
 
@@ -20,14 +22,15 @@ def doLogin(request):
         user=EmailBackEnd.authenticate(request,username=request.POST.get("email"),password=request.POST.get("password"))
         if user!=None:
             login(request,user)
-            if user.user_type=="1":
-                return HttpResponseRedirect('/admin_home')
-            elif user.user_type=="2":
-                return HttpResponseRedirect(reverse("staff_home"))
-            else:
-                return HttpResponseRedirect(reverse("student_home"))
+            return HttpResponseRedirect('/admin_home')
+            # if user.user_type=="1":
+            #     return HttpResponseRedirect('/admin_home')
+            # elif user.user_type=="2":
+            #     return HttpResponseRedirect(reverse("staff_home"))
+            # else:
+            #     return HttpResponseRedirect(reverse("student_home"))
         else:
-            messages.error(request,"Invalid Login Details")
+            messages.error(request, "Invalid Login Details")
             return HttpResponseRedirect("/")
 
 
