@@ -82,3 +82,42 @@ def add_student_save(request):
             messages.error(request,"Failed to add Student.")
             return HttpResponseRedirect("/add_student")
 
+def add_subject(request):
+    courses = Courses.objects.all()
+    staffs = CustomUser.objects.filter(user_type=2)
+    return render(request,"hod_template/add_subject_template.html",{"staffs":staffs,"courses":courses})
+
+def add_subject_save(request):
+    if request.method!="POST":
+        return HttpResponse("<h2>Method Not Allowed</h2>")
+    else:
+        subject_name=request.POST.get("subject_name")
+        course_id=request.POST.get("course")
+        course=Courses.objects.get(id=)
+        staff_id=request.POST.get("staff")
+        staff=CustomUser.objects.get(id=staff_id)
+
+        try:
+            subject=Subjects(subject_name=subject_name,course_id=course,staff_id=staff)
+            subject.save()
+            messages.success(request,"Successfully Added Subject")
+            return HttpResponseRedirect("/add_subject")
+        except:
+            messages.error(request,"Failed to add Subject.")
+            return HttpResponseRedirect("/add_subject")
+
+def manage_staff(request):
+    staffs=Staffs.objects.all()
+    return render(request,"hod_template/manage_staff_template.html",{"staffs":staffs})
+
+def manage_student(request):
+    students=Student.objects.all()
+    return render(request,"hod_template/manage_student_template.html",{"students":students})
+
+def manage_course(request):
+    courses=Courses.objects.all()
+    return render(request,"hod_template/manage_course_template.html",{"courses":courses})
+
+def manage_subject(request):
+    subjects=Subjects.get.all()
+    return render(request,"hod_tempalte/manage_subject_template.html",{"subjects":subjects})
