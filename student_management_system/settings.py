@@ -27,12 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-MEDIA_URL="/media/"
-MEDIA_ROOT=os.path.join(BASE_DIR,"media")
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-STATIC_URL="/static/"
-STATIC_ROOT=os.path.join(BASE_DIR,"static")
-
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 
 # Application definition
@@ -55,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'student_management_app.LoginCheckMiddleware'
 ]
 
 ROOT_URLCONF = 'student_management_system.urls'
@@ -83,8 +83,8 @@ WSGI_APPLICATION = 'student_management_system.wsgi.application'
 
 DATABASES = {
     'default': {
-        #'ENGINE': 'django.db.backends.sqlite3',
-        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'student_management_system',
         'USER': 'student_management_system',
@@ -93,7 +93,7 @@ DATABASES = {
         'PORT': '3306'
 
 
-        }
+    }
 }
 
 
@@ -134,5 +134,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-AUTH_USER_MODEL="student_management_app.CustomUser"
-AUTHENTICATION_BACKENDS=['student_management_app.EmailBackEnd.EmailBackEnd']
+AUTH_USER_MODEL = "student_management_app.CustomUser"
+AUTHENTICATION_BACKENDS = ['student_management_app.EmailBackEnd.EmailBackEnd']
