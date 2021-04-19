@@ -18,11 +18,25 @@ class EditStudentForm(forms.Form):
     address = forms.CharField(label="Address", max_length=50, widget=forms.TextInput(
         attrs={"class": "form-control"}))
 
-    courses = Courses.objects.all()
     course_list = []
-    for course in courses:
-        small_course = (course.id, course.course_name)
-        course_list.append(small_course)
+    
+    try:
+        courses = Courses.objects.all()
+
+        for course in courses:
+            small_course = (course.id, course.course_name)
+            course_list.append(small_course)
+
+    except:
+        course_list=[]
+
+    session_list = []
+    sessions = SessionYearModel.objects.all()
+
+    for ses in sessions:
+        small_ses = (ses.id, str(ses.session_start_year)+"   TO   "+str(ses.session_end_year))
+        session_list.append(small_ses)
+    #     session_list=[]
 
     gender_choice = (
         ("Male", "Male"),
@@ -33,9 +47,7 @@ class EditStudentForm(forms.Form):
         attrs={"class": "form-control"}))
     sex = forms.ChoiceField(label="Sex", choices=gender_choice, widget=forms.Select(
         attrs={"class": "form-control"}))
-    session_start = forms.DateField(
-        label="Session Start", widget=DateInput(attrs={"class": "form-control"}))
-    session_end = forms.DateField(
-        label="Session End", widget=DateInput(attrs={"class": "form-control"}))
+    session_year_id = forms.ChoiceField(
+        label="Session Year", widget=forms.Select(attrs={"class": "form-control"}),choices=session_list)
     profile_pic = forms.FileField(label="Profile Pic", max_length=50, widget=forms.FileInput(
         attrs={"class": "form-control"}), required=False)
