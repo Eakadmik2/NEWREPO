@@ -63,9 +63,8 @@ urlpatterns = [
     path('add_session_save',HodViews.add_session_save,name="add_session_save"),
 
     path('staff_take_attendance',StaffViews.staff_take_attendance,name="staff_take_attendance"),
-
-
-
+    path('get_student',StaffViews.get_students,name="get_students"),
+    path('save_attendace_data',StaffViews.save_attendace_data,name="save_attendace_data"),
 
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
