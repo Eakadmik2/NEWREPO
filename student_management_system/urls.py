@@ -23,6 +23,7 @@ from student_management_system import settings
 urlpatterns = [
     path('demo', views.showDemoPage),
     path('admin/', admin.site.urls),
+    path('accounts/',include('django.contrib.auth.urls')),
     path('', views.ShowLoginPage, name="show_login"),
     path('get_user_details', views.GetUserDetails),
     path('logout_user', views.logout_user, name="logout"),
