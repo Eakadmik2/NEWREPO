@@ -84,6 +84,8 @@ urlpatterns = [
          name="staff_feedback"),
     path('staff_feedback_save', StaffViews.staff_feedback_save,
          name="staff_feedback_save"),
+    path('student_view_attendance', StudentViews.student_view_attendance,name="student_view_attendance"),
+    path('student_view_attendance_post', StudentViews.student_view_attendance_post,name="student_view_attendance_post"),
 
 
 
