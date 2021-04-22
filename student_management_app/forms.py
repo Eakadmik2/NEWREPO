@@ -7,14 +7,14 @@ class DateInput(forms.DateInput):
 
 class EditStudentForm(forms.Form):
     email = forms.EmailField(label="Email", max_length=50, widget=forms.EmailInput(
-        attrs={"class": "form-control"}))
+        attrs={"class": "form-control","autocomplete":"off"}))
 
     first_name = forms.CharField(label="First Name", max_length=50, widget=forms.TextInput(
         attrs={"class": "form-control"}))
     last_name = forms.CharField(label="Last Name", max_length=50, widget=forms.TextInput(
         attrs={"class": "form-control"}))
     username = forms.CharField(label="Username", max_length=50, widget=forms.TextInput(
-        attrs={"class": "form-control"}))
+        attrs={"class": "form-control","autocomplete":"off"}))
     address = forms.CharField(label="Address", max_length=50, widget=forms.TextInput(
         attrs={"class": "form-control"}))
 
