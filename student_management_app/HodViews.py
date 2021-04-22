@@ -346,3 +346,37 @@ def check_username_exist(request):
     else:
         return HttpResponse(False)
 
+def staff_feedback_message(request):
+    feedbacks=FeedBackStaffs.objects.all()
+    return render(request,"hod_template/staff_feedback_template.html",{"feedbacks":feedbacks})
+
+
+def student_feedback_message(request):
+    feedbacks=FeedBackStudent.objects.all()
+    return render(request,"hod_template/student_feedback_template.html",{"feedbacks":feedbacks})
+
+@csrf_exempt
+def student_feedback_message_replied(request):
+    feedback_id=request.POST.get("id")
+    feedback_message=request.POST.get("message")
+
+    try:
+        feedback=FeedBackStudent.objects.get(id=feedback_id)
+        feedback.feedback_reply=feedback_message
+        feedback.save()
+        return HttpResponse("True")
+    except:
+        return HttpResponse("False")
+
+@csrf_exempt
+def staff_feedback_message_replied(request):
+    feedback_id=request.POST.get("id")
+    feedback_message=request.POST.get("message")
+
+    try:
+        feedback=FeedBackStaff.objects.get(id=feedback_id)
+        feedback.feedback_reply=feedback_message
+        feedback.save()
+        return HttpResponse("True")
+    except:
+        return HttpResponse("False")
