@@ -5,7 +5,23 @@ from .models import Courses
 
 
 def admin_home(request):
-    return render(request, "hod_template/home_content.html")
+    student_count=Students.objects.all().count()
+    staff_count=Staffs.objects.all().count()
+    subject_count=Subjects.objects.all().count()
+    course_count=Courses.objects.all().count()
+    
+    course_all=Courses.objects.all()
+    course_name_list=[]
+    subject_count_list=[]
+    student_count_list_in_course=[]
+    for course in course_all:
+        subjects=Subjects.objects.filter(course_id=course.id).count()
+        students=Students.objects.filter(course_id=course_id).count()
+        course_name_list.append(course.course_name)
+        subject_count.append(subjects)
+        student_count_list_in_course.append(students)
+
+    return render(request, "hod_template/home_content.html",{"student_count":student_count,"staff_count":staff_count,"subject_count":subject_count,"course_count":course_count,"course_name_lsit":course_name_list,"subject_count_list":subject_count_list,"student_count_list_in_course":student_count_list_in_course})
 
 
 def add_staff(request):
