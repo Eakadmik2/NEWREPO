@@ -20,8 +20,40 @@ def admin_home(request):
         course_name_list.append(course.course_name)
         subject_count.append(subjects)
         student_count_list_in_course.append(students)
+    
+    subjects_all=Subjects.objects.all()
+    subject_list=[]
+    student_count_list_in_subject=[]
+    for subject in subjects_all:
+        course=Courses.objects.get(id=subject.course.id.id)
+        student_count=Students.objects.filter(course_id=course_id).count()
+        subject_list.append(subject.subject_name)
+        student_count_list_in_subject.append(student_count)
 
-    return render(request, "hod_template/home_content.html",{"student_count":student_count,"staff_count":staff_count,"subject_count":subject_count,"course_count":course_count,"course_name_lsit":course_name_list,"subject_count_list":subject_count_list,"student_count_list_in_course":student_count_list_in_course})
+    staffs=Staffs.objects.all()
+    attendance_present_list_staff=[]
+    attendance_absent_list_staff=[]
+    staff_name_list=[]
+    for staff in staffs:
+        subject_id=Subjects.objects.filter(staff_id=staff.admin.id)
+        attendance=Attendance.objects.filter(subject_id__in=subject_ids).count()
+        leaves=LeaveReportStaff.objects.filter(staff_id=staff.id,leave_Status=1).count()
+        attendance_present_list_staff.append(attendance)
+        attendance_absent_list_staff.append(leaves)
+        staff_name_list.append(staff.admin.username)
+    
+    students_all=Students.objects.all()
+    attendance_present_list_student=[]
+    attendance_absent_list_student=[]
+    student_name_list=[]
+    for student in students_all:
+        attendance=AttendanceReport.objects.filter(subject_id=student_id,status=True).count()
+        absent=AttendanceReport.objects.filter(subject_id=student_id,status=False).count()
+        leaves=LeaveReportStudent.objects.filter(student_id=student.id,leave_Status=1).count()
+        attendance_present_list_student.append(attendance)
+        attendance_absent_list_student.append(leaves+absent)
+        student_name_list.append(student.admin.username)
+    return render(request, "hod_template/home_content.html",{"student_count":student_count,"staff_count":staff_count,"subject_count":subject_count,"course_count":course_count,"course_name_lsit":course_name_list,"subject_count_list":subject_count_list,"student_count_list_in_course":student_count_list_in_course,"student_count_list_in_subject":student_count_list_in_subject,"subject_list":subject_list,"staff_name_list":staff_name_list,"attendance_absent_list_staff":attendance_absent_list_staff,"attendance_present_list_staff":attendance_present_list_staff,"student_name_list":student_name_list,"attendance_present_list_student":attendance_present_list_student,"attendance_absent_list_student":attendance_absent_list_student})
 
 
 def add_staff(request):
