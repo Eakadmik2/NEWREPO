@@ -77,7 +77,12 @@ urlpatterns = [
     path('admin_get_attendance_student', HodViews.admin_get_attendance_student, name="admin_get_attendance_student"),
     path('admin_profile', HodViews.admin_profile, name="admin_profile"),
     path('admin_profile_save', HodViews.admin_profile_save, name="admin_profile_save"),
+    path('admin_send_notification_staff',HodViews.admin_send_notification_staff,name="admin_send_notification_staff"),
+    path('admin_send_notification_student',HodViews.admin_send_notification_student,name="admin_send_notification_student"),
+    path('send_notification_student',HodViews.send_notification_student,name="send_notification_student"),
+    path('send_notification_staff',HodViews.send_notification_staff,name="send_notification_staff"),
 
+#STAFF URL PATHS
     path('staff_take_attendance', StaffViews.staff_take_attendance, name="staff_take_attendance"),
     path('staff_update_attendance', StaffViews.staff_update_attendance,name="staff_update_attendance"),
     path('get_students', StaffViews.get_students, name="get_students"),
@@ -91,7 +96,10 @@ urlpatterns = [
     path('staff_feedback_save', StaffViews.staff_feedback_save,name="staff_feedback_save"),
     path('staff_profile', StaffViews.staff_profile, name="staff_profile"),
     path('staff_profile_save', StaffViews.staff_profile_save, name="staff_profile_save"),
+    path('staff_fcmtoken_save', StaffViews.staff_fcmtoken_save, name="staff_fcmtoken_save"),
+    path('staff_all_notification', StaffViews.staff_all_notification, name="staff_all_notification"),
 
+#STUDENT URL PATHS
     path('student_view_attendance', StudentViews.student_view_attendance,name="student_view_attendance"),
     path('student_view_attendance_post', StudentViews.student_view_attendance_post,name="student_view_attendance_post"),
     path('student_apply_leave', StudentViews.student_apply_leave,name="student_apply_leave"),
@@ -100,7 +108,9 @@ urlpatterns = [
     path('student_feedback_save', StudentViews.student_feedback_save,name="student_feedback_save"),
     path('student_profile', StudentViews.student_profile, name="student_profile"),
     path('student_profile_save', StudentViews.student_profile_save, name="student_profile_save"),
-
+    path('student_fcmtoken_save', StudentViews.student_fcmtoken_save, name="student_fcmtoken_save"),
+    path('firebase-messaging-sw.js',views.showFirebaseJS,name="show_firebase_js"),
+    path('student_all_notification',StudentViews.student_all_notification,name="student_all_notification"),
 
 
 
