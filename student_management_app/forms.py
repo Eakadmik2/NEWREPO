@@ -39,7 +39,7 @@ class EditStudentForm(forms.Form):
         course_list = []
 
     session_list = []
-    sessions = SessionYearModel.objects.all()
+    sessions = SessionYearModel.object.all()
 
     for ses in sessions:
         small_ses = (ses.id, str(ses.session_start_year) +

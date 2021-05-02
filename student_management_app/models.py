@@ -6,10 +6,10 @@ from django.dispatch import receiver
 
 # Create your models here.
 class SessionYearModel(models.Model):
-    id = models.AutoField(primary_key=True)
-    session_start_year = models.DateField()
-    session_end_year = models.DateField()
-    object = models.Manager()
+    id=models.AutoField(primary_key=True)
+    session_start_year=models.DateField()
+    session_end_year=models.DateField()
+    object=models.Manager()
 
 
 class CustomUser(AbstractUser):
@@ -149,7 +149,7 @@ class NotificationStaffs(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = models.Manager()
 
-class StudentResult(model.Model):
+class StudentResult(models.Model):
     id=models.AutoField(primary_key=True)
     student_id=models.ForeignKey(Students,on_delete=models.CASCADE)
     subject_id=models.ForeignKey(Students,on_delete=models.CASCADE)

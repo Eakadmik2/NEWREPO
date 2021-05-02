@@ -15,9 +15,12 @@ Including another URLConf
 """
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import TemplateView
 
 from student_management_app import views, HodViews, StaffViews, StudentViews
+from student_management_app.EditResultVIewClass import EditResultViewClass
 from student_management_system import settings
 
 urlpatterns = [
@@ -75,11 +78,10 @@ urlpatterns = [
          name="staff_feedback_message_replied"),
     path('student_leave_view', HodViews.student_leave_view,
          name="student_leave_view"),
-    path('staff_leave_view', HodViews.staff_leave_view, name="staff_leave_view"),
-    path('student_approve_leave' < str:leave_id > , HodViews.student_approve_leave, name="student_approve_leave"),
-    path('student_disapprove_leave' < str:leave_id > , HodViews.student_disapprove_leave, name="student_disapprove_leave"),
-    path('staff_approve_leave' < str:leave_id > , HodViews.staff_approve_leave, name="staff_approve_leave"),
-    path('staff_disapprove_leave' < str:leave_id > , HodViews.staff_disapprove_leave, name="staff_disapprove_leave"),
+    path('student_approve_leave/<str:leave_id>', HodViews.student_approve_leave,name="student_approve_leave"),
+    path('student_disapprove_leave/<str:leave_id>', HodViews.student_disapprove_leave,name="student_disapprove_leave"),
+    path('staff_disapprove_leave/<str:leave_id>', HodViews.staff_disapprove_leave,name="staff_disapprove_leave"),
+    path('staff_approve_leave/<str:leave_id>', HodViews.staff_approve_leave,name="staff_approve_leave"),
     path('admin_view_attendance', HodViews.admin_view_attendance,
          name="admin_view_attendance"),
     path('admin_get_attendance_dates', HodViews.admin_get_attendance_dates,

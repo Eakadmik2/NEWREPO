@@ -1,7 +1,13 @@
-from django.shortcuts import render
-from models import LeaveReportStudent
-from django.urls import reverse
+import datetime
+
 from django.contrib import messages
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+
+from student_management_app.models import Students, Courses, Subjects, CustomUser, Attendance, AttendanceReport, \
+    LeaveReportStudent, FeedBackStudent, NotificationStudent, StudentResult, SessionYearModel
 
 
 def student_home(request):
@@ -9,9 +15,9 @@ def student_home(request):
     attendance_total = AttendanceReport.objects.filter(
         student_id=student_obj).count()
     attendance_present = AttendanceReport.objects.filter(
-        student_id=student_obj.status=True).count()
+        student_id=student_obj.status==True).count()
     attendance_absent = AttendanceReport.objects.filter(
-        student_id=student_obj.status=False).count()
+        student_id=student_obj.status==False).count()
     course = Courses.objects.get(id=student_obj.course_id.id)
     subjects = Subjects.objects.filter(
         course_id=course).count()
