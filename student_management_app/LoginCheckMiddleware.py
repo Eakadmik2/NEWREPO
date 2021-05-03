@@ -4,7 +4,6 @@ from django.utils.deprecation import MiddlewareMixin
 
 
 class LoginCheckMiddleWare(MiddlewareMixin):
-
     def process_view(self, request, view_func, view_args, view_kwargs):
         modulename = view_func.__module__
         print(modulename)
@@ -32,7 +31,7 @@ class LoginCheckMiddleWare(MiddlewareMixin):
                 else:
                     return HttpResponseRedirect(reverse("student_home"))
         else:
-            if request.path == reverse("show_login") or request.path == reverse("do_login") or modulename == "django.contrib.auth.views":
+            if request.path == reverse("show_login") or request.path == reverse("do_login") or modulename == "django.contrib.auth.views" or modulename="django.contrib.admin.sites" or modulename="student_management_app.views":
                 pass
             else:
                 return HttpResponseRedirect(reverse("show_login"))

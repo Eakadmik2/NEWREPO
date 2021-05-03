@@ -84,3 +84,27 @@ def showFirebaseJS(request):
          '    };' \
          '    return self.registration.showNotification(payload.notification.title,notificationOption);' \
          '});'
+
+def signup_admin(request):
+    return render(request,"signup_admin_page.html")
+
+def signup_student(request):
+    return render(request,"signup_student_page.html")
+
+def signup_staff(request):
+    return render(request,"signup_staff_page.html")
+
+def do_admin_signup(request):
+    username = request.POST.get("username")
+    email = request.POST.get("email")
+    password = request.POST.get("password")
+
+    try:
+        user=CustomUser.objects.create_user(username=username,password=password,email=email,user_type=1)
+        user.save()
+        return HttpResponse(("Admin User Created"))
+        messages.success(request, "Successfully Added Admin")
+        return HttpResponseRedirect(reverse("show_login"))
+    except:
+        messages.error(request, "Failed to add Admin.")
+       return HttpResponseRedirect(reverse("show_login")
