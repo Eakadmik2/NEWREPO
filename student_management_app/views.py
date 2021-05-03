@@ -108,3 +108,20 @@ def do_admin_signup(request):
     except:
         messages.error(request, "Failed to add Admin.")
        return HttpResponseRedirect(reverse("show_login")
+
+def do_staff_signup(request):
+    username = request.POST.get("username")
+    email = request.POST.get("email")
+    password = request.POST.get("password")
+    address = request.POST.get("address")
+
+    try:
+        user=CustomUser.objects.create_user(username=username,password=password,email=email,user_type=2)
+        user.staffs.address = address
+        user.save()
+        return HttpResponse(("Staff User Created"))
+        messages.success(request, "Successfully Created Staff")
+        return HttpResponseRedirect(reverse("show_login"))
+    except:
+        messages.error(request, "Failed to create Staff.")
+       return HttpResponseRedirect(reverse("show_login")
