@@ -89,7 +89,9 @@ def signup_admin(request):
     return render(request,"signup_admin_page.html")
 
 def signup_student(request):
-    return render(request,"signup_student_page.html")
+    courses=Courses.objects.all()
+    session_years=SessionYearModel.object.all()
+    return render(request,"signup_student_page.html",{"courses":courses,"session_years":session_years})
 
 def signup_staff(request):
     return render(request,"signup_staff_page.html")
@@ -107,7 +109,7 @@ def do_admin_signup(request):
         return HttpResponseRedirect(reverse("show_login"))
     except:
         messages.error(request, "Failed to add Admin.")
-       return HttpResponseRedirect(reverse("show_login")
+        return HttpResponseRedirect(reverse("show_login"))
 
 def do_staff_signup(request):
     username = request.POST.get("username")
@@ -124,4 +126,37 @@ def do_staff_signup(request):
         return HttpResponseRedirect(reverse("show_login"))
     except:
         messages.error(request, "Failed to create Staff.")
-       return HttpResponseRedirect(reverse("show_login")
+        return HttpResponseRedirect(reverse("show_login"))
+
+def do_student_signup(request):
+    first_name = request.POST.get("first_name")
+    last_name = request.POST.get("last_name")
+    username = request.POST.get("username")
+    email = request.POST.get("email")
+    password = request.POST.get("password")
+    address = request.POST.get("address")
+    session_year_id = request.POST.get("session_year")
+    course_id = request.POST.get("course")
+    sex = request.POST.get("sex")
+
+    profile_pic = request.FILES['profile_pic']
+    fs = FileSystemStorage()
+    filename = fs.save(profile_pic.name, profile_pic)
+    profile_pic_url = fs.url(filename)
+
+    try:
+        user = CustomUser.objects.create_user(username=username, password=password, email=email, last_name=last_name,
+                                            first_name=first_name, user_type=3)
+        user.students.address = address
+        course_obj = Courses.objects.get(id=course_id)
+        user.students.course_id = course_obj
+        session_year = SessionYearModel.object.get(id=session_year_id)
+        user.students.session_year_id = session_year
+        user.students.gender = sex
+        user.students.profile_pic = profile_pic_url
+        user.save()
+        messages.success(request, "Successfully Added Student")
+        return HttpResponseRedirect(reverse("show_login"))
+    except:
+       messages.error(request, "Failed to Add Student")
+       return HttpResponseRedirect(reverse("show_login"))
