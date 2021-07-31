@@ -1,26 +1,28 @@
 import datetime
+import json
+import os
 
+import requests
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from django.contrib import messages
-
+from django.urls import reverse
 
 from student_management_app.EmailBackEnd import EmailBackEnd
-
-# Create your views here.
+from student_management_app.models import CustomUser, Courses, SessionYearModel
+from student_management_system import settings
 
 
 def showDemoPage(request):
-    return render(request, "demo.html")
-
+    return render(request,"demo.html")
 
 def ShowLoginPage(request):
-    return render(request, "login_page.html")
-
+    return render(request,"login_page.html")
 
 def doLogin(request):
-    if request.method != "POST":
+    if request.method!="POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
     else:
         captcha_token=request.POST.get("g-recaptcha-response")
@@ -33,28 +35,26 @@ def doLogin(request):
         if cap_json['success']==False:
             messages.error(request,"Invalid Captcha Try Again")
             return HttpResponseRedirect("/")
-        
-        user = EmailBackEnd.authenticate(request, username=request.POST.get(
-            "email"), password=request.POST.get("password"))
-        if user != None:
-            login(request, user)
-            if user.user_type == "1":
+
+        user=EmailBackEnd.authenticate(request,username=request.POST.get("email"),password=request.POST.get("password"))
+        if user!=None:
+            login(request,user)
+            if user.user_type=="1":
                 return HttpResponseRedirect('/admin_home')
-            elif user.user_type == "2":
+            elif user.user_type=="2":
                 return HttpResponseRedirect(reverse("staff_home"))
             else:
                 return HttpResponseRedirect(reverse("student_home"))
         else:
-            messages.error(request, "Invalid Login Details")
+            messages.error(request,"Invalid Login Details")
             return HttpResponseRedirect("/")
 
 
 def GetUserDetails(request):
-    if request.user != None:
+    if request.user!=None:
         return HttpResponse("User : "+request.user.email+" usertype : "+str(request.user.user_type))
     else:
         return HttpResponse("Please Login First")
-
 
 def logout_user(request):
     logout(request)
@@ -85,6 +85,11 @@ def showFirebaseJS(request):
          '    return self.registration.showNotification(payload.notification.title,notificationOption);' \
          '});'
 
+    return HttpResponse(data,content_type="text/javascript")
+
+def Testurl(request):
+    return HttpResponse("Ok")
+
 def signup_admin(request):
     return render(request,"signup_admin_page.html")
 
@@ -97,38 +102,36 @@ def signup_staff(request):
     return render(request,"signup_staff_page.html")
 
 def do_admin_signup(request):
-    username = request.POST.get("username")
-    email = request.POST.get("email")
-    password = request.POST.get("password")
+    username=request.POST.get("username")
+    email=request.POST.get("email")
+    password=request.POST.get("password")
 
     try:
         user=CustomUser.objects.create_user(username=username,password=password,email=email,user_type=1)
         user.save()
-        return HttpResponse(("Admin User Created"))
-        messages.success(request, "Successfully Added Admin")
+        messages.success(request,"Successfully Created Admin")
         return HttpResponseRedirect(reverse("show_login"))
     except:
-        messages.error(request, "Failed to add Admin.")
+        messages.error(request,"Failed to Create Admin")
         return HttpResponseRedirect(reverse("show_login"))
 
 def do_staff_signup(request):
-    username = request.POST.get("username")
-    email = request.POST.get("email")
-    password = request.POST.get("password")
-    address = request.POST.get("address")
+    username=request.POST.get("username")
+    email=request.POST.get("email")
+    password=request.POST.get("password")
+    address=request.POST.get("address")
 
     try:
         user=CustomUser.objects.create_user(username=username,password=password,email=email,user_type=2)
-        user.staffs.address = address
+        user.staffs.address=address
         user.save()
-        return HttpResponse(("Staff User Created"))
-        messages.success(request, "Successfully Created Staff")
+        messages.success(request,"Successfully Created Staff")
         return HttpResponseRedirect(reverse("show_login"))
     except:
-        messages.error(request, "Failed to create Staff.")
+        messages.error(request,"Failed to Create Staff")
         return HttpResponseRedirect(reverse("show_login"))
 
-def do_student_signup(request):
+def do_signup_student(request):
     first_name = request.POST.get("first_name")
     last_name = request.POST.get("last_name")
     username = request.POST.get("username")
@@ -144,19 +147,19 @@ def do_student_signup(request):
     filename = fs.save(profile_pic.name, profile_pic)
     profile_pic_url = fs.url(filename)
 
-    try:
-        user = CustomUser.objects.create_user(username=username, password=password, email=email, last_name=last_name,
-                                            first_name=first_name, user_type=3)
-        user.students.address = address
-        course_obj = Courses.objects.get(id=course_id)
-        user.students.course_id = course_obj
-        session_year = SessionYearModel.object.get(id=session_year_id)
-        user.students.session_year_id = session_year
-        user.students.gender = sex
-        user.students.profile_pic = profile_pic_url
-        user.save()
-        messages.success(request, "Successfully Added Student")
-        return HttpResponseRedirect(reverse("show_login"))
-    except:
-       messages.error(request, "Failed to Add Student")
-       return HttpResponseRedirect(reverse("show_login"))
+    #try:
+    user = CustomUser.objects.create_user(username=username, password=password, email=email, last_name=last_name,
+                                          first_name=first_name, user_type=3)
+    user.students.address = address
+    course_obj = Courses.objects.get(id=course_id)
+    user.students.course_id = course_obj
+    session_year = SessionYearModel.object.get(id=session_year_id)
+    user.students.session_year_id = session_year
+    user.students.gender = sex
+    user.students.profile_pic = profile_pic_url
+    user.save()
+    messages.success(request, "Successfully Added Student")
+    return HttpResponseRedirect(reverse("show_login"))
+    #except:
+     #   messages.error(request, "Failed to Add Student")
+      #  return HttpResponseRedirect(reverse("show_login"))
